@@ -1,4 +1,4 @@
-import { HomeFilled, InfoFilled, Switch, Picture, Document, Files } from '@element-plus/icons-vue'
+import { HomeFilled, InfoFilled, Switch, Picture, VideoCamera, Document, Files, Headset } from '@element-plus/icons-vue'
 
 /**
  * 侧边栏菜单配置
@@ -51,10 +51,6 @@ export const menuList = [
         label: 'URL编码/解码',
       },
       {
-        key: '/convert/variable',
-        label: '变量格式转换',
-      },
-      {
         key: '/convert/qrcode-gen',
         label: '字符串生成二维码',
       },
@@ -69,6 +65,22 @@ export const menuList = [
       {
         key: '/convert/barcode-decode',
         label: '条形码解码',
+      },
+      {
+        key: '/convert/variable',
+        label: '变量格式转换',
+      },
+      {
+        key: '/convert/case-convert',
+        label: '字母大小写互转',
+      },
+      {
+        key: '/convert/amount-case',
+        label: '金额大小写互转',
+      },
+      {
+        key: '/convert/timestamp',
+        label: '时间戳转换',
       },
     ],
   },
@@ -89,6 +101,26 @@ export const menuList = [
         key: '/image/grid9',
         label: '图片九宫格切图',
       },
+      {
+        key: '/image/corner-radius',
+        label: '图片裁剪圆角',
+      },
+      {
+        key: '/image/add-bg',
+        label: '透明图片加背景',
+      },
+      {
+        key: '/image/watermark',
+        label: '图片加水印',
+      },
+      {
+        key: '/image/rotate',
+        label: '图片旋转',
+      },
+      {
+        key: '/image/flip',
+        label: '图片水平/垂直翻转',
+      },
     ],
   },
   {
@@ -104,6 +136,10 @@ export const menuList = [
         key: '/format/sql',
         label: 'SQL格式化',
       },
+      {
+        key: '/format/vertical-text',
+        label: '文字竖排',
+      },
     ],
   },
   {
@@ -114,6 +150,36 @@ export const menuList = [
       {
         key: '/code/diff',
         label: '代码对比',
+      },
+      {
+        key: '/mock/generator',
+        label: 'Mock数据生成器',
+      },
+      {
+        key: '/code/regex',
+        label: '正则表达式测试',
+      },
+    ],
+  },
+  {
+    key: '/video',
+    label: '视频工具',
+    icon: VideoCamera,
+    children: [
+      {
+        key: '/video/trim',
+        label: '视频时长裁剪',
+      },
+    ],
+  },
+  {
+    key: '/audio',
+    label: '音频工具',
+    icon: Headset,
+    children: [
+      {
+        key: '/audio/crop',
+        label: '音频时长裁剪',
       },
     ],
   },

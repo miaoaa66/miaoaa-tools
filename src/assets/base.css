@@ -21,6 +21,8 @@
   --toggle-bg-hover: rgba(255, 255, 255, 0.2);
   --stage-bg: #f5f7fa;
   --panel-bg: #ffffff;
+  /* 透明图片棋盘格 */
+  --checker-color: rgba(0, 0, 0, 0.08);
   /* 滚动条 */
   --scrollbar-thumb: rgba(144, 147, 153, 0.4);
   --scrollbar-thumb-hover: rgba(144, 147, 153, 0.65);
@@ -42,6 +44,8 @@ html.dark {
   --toggle-bg-hover: rgba(255, 255, 255, 0.2);
   --stage-bg: #2a2b2c;
   --panel-bg: #262727;
+  /* 透明图片棋盘格 */
+  --checker-color: rgba(255, 255, 255, 0.12);
   /* 滚动条 */
   --scrollbar-thumb: rgba(255, 255, 255, 0.25);
   --scrollbar-thumb-hover: rgba(255, 255, 255, 0.4);

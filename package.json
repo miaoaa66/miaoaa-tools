@@ -13,6 +13,9 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
+    "@ffmpeg/core": "^0.12.10",
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
     "@zxing/library": "^0.21.3",
     "element-plus": "^2.14.3",
     "gifenc": "^1.0.3",

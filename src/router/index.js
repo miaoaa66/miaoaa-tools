@@ -55,6 +55,12 @@ const router = createRouter({
       meta: { title: '多PNG合成GIF' },
     },
     {
+      path: '/convert/case-convert',
+      name: 'case-convert',
+      component: () => import('../views/convert/CaseConvertView/CaseConvertView.vue'),
+      meta: { title: '字母大小写互转' },
+    },
+    {
       path: '/convert/url-encode',
       name: 'url-encode',
       component: () => import('../views/convert/UrlEncodeView/UrlEncodeView.vue'),
@@ -91,6 +97,18 @@ const router = createRouter({
       meta: { title: '条形码解码' },
     },
     {
+      path: '/convert/amount-case',
+      name: 'amount-case',
+      component: () => import('../views/convert/AmountCaseConvertView/AmountCaseConvertView.vue'),
+      meta: { title: '金额大小写互转' },
+    },
+    {
+      path: '/convert/timestamp',
+      name: 'timestamp',
+      component: () => import('../views/convert/TimestampView/TimestampView.vue'),
+      meta: { title: '时间戳转换' },
+    },
+    {
       path: '/image/crop',
       name: 'image-crop',
       component: () => import('../views/image/ImageCropView/ImageCropView.vue'),
@@ -109,6 +127,42 @@ const router = createRouter({
       meta: { title: '图片九宫格切图' },
     },
     {
+      path: '/image/corner-radius',
+      name: 'image-corner-radius',
+      component: () => import('../views/image/ImageCornerRadiusView/ImageCornerRadiusView.vue'),
+      meta: { title: '图片裁剪圆角' },
+    },
+    {
+      path: '/image/add-bg',
+      name: 'image-add-bg',
+      component: () => import('../views/image/ImageAddBgView/ImageAddBgView.vue'),
+      meta: { title: '透明图片加背景' },
+    },
+    {
+      path: '/image/watermark',
+      name: 'image-watermark',
+      component: () => import('../views/image/ImageWatermarkView/ImageWatermarkView.vue'),
+      meta: { title: '图片加水印' },
+    },
+    {
+      path: '/image/rotate',
+      name: 'image-rotate',
+      component: () => import('../views/image/ImageRotateView/ImageRotateView.vue'),
+      meta: { title: '图片旋转' },
+    },
+    {
+      path: '/image/flip',
+      name: 'image-flip',
+      component: () => import('../views/image/ImageFlipView/ImageFlipView.vue'),
+      meta: { title: '图片水平/垂直翻转' },
+    },
+    {
+      path: '/video/trim',
+      name: 'video-trim',
+      component: () => import('../views/video/VideoTrimView/VideoTrimView.vue'),
+      meta: { title: '视频时长裁剪' },
+    },
+    {
       path: '/format/json',
       name: 'format-json',
       component: () => import('../views/format/JsonFormatView/JsonFormatView.vue'),
@@ -121,10 +175,34 @@ const router = createRouter({
       meta: { title: 'SQL格式化' },
     },
     {
+      path: '/format/vertical-text',
+      name: 'format-vertical-text',
+      component: () => import('../views/format/VerticalTextView/VerticalTextView.vue'),
+      meta: { title: '文字竖排' },
+    },
+    {
       path: '/code/diff',
       name: 'code-diff',
       component: () => import('../views/code/CodeDiffView/CodeDiffView.vue'),
       meta: { title: '代码对比' },
+    },
+    {
+      path: '/mock/generator',
+      name: 'mock-generator',
+      component: () => import('../views/mock/MockGeneratorView/MockGeneratorView.vue'),
+      meta: { title: 'Mock数据生成器' },
+    },
+    {
+      path: '/code/regex',
+      name: 'code-regex',
+      component: () => import('../views/code/RegexTestView/RegexTestView.vue'),
+      meta: { title: '正则表达式测试' },
+    },
+    {
+      path: '/audio/crop',
+      name: 'audio-crop',
+      component: () => import('../views/audio/AudioCropView/AudioCropView.vue'),
+      meta: { title: '音频时长裁剪' },
     },
   ],
 })
