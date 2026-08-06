@@ -102,6 +102,30 @@ const router = createRouter({
       component: () => import('../views/image/ImageCompressView/ImageCompressView.vue'),
       meta: { title: '图片压缩' },
     },
+    {
+      path: '/image/grid9',
+      name: 'image-grid9',
+      component: () => import('../views/image/ImageGrid9View/ImageGrid9View.vue'),
+      meta: { title: '图片九宫格切图' },
+    },
+    {
+      path: '/format/json',
+      name: 'format-json',
+      component: () => import('../views/format/JsonFormatView/JsonFormatView.vue'),
+      meta: { title: 'JSON格式化' },
+    },
+    {
+      path: '/format/sql',
+      name: 'format-sql',
+      component: () => import('../views/format/SqlFormatView/SqlFormatView.vue'),
+      meta: { title: 'SQL格式化' },
+    },
+    {
+      path: '/code/diff',
+      name: 'code-diff',
+      component: () => import('../views/code/CodeDiffView/CodeDiffView.vue'),
+      meta: { title: '代码对比' },
+    },
   ],
 })
 

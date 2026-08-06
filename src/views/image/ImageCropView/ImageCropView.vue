@@ -540,7 +540,7 @@ onBeforeUnmount(() => {
 
 .crop-box {
   position: absolute;
-  border: 2px solid #409eff;
+  border: 2px solid var(--el-color-primary);
   box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.22);
   cursor: move;
   box-sizing: border-box;
@@ -557,7 +557,7 @@ onBeforeUnmount(() => {
   width: 14px;
   height: 14px;
   background: #fff;
-  border: 1px solid #409eff;
+  border: 1px solid var(--el-color-primary);
   border-radius: 2px;
   cursor: nwse-resize;
 }

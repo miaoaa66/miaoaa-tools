@@ -1,4 +1,4 @@
-import { HomeFilled, InfoFilled, Switch, Picture } from '@element-plus/icons-vue'
+import { HomeFilled, InfoFilled, Switch, Picture, Document, Files } from '@element-plus/icons-vue'
 
 /**
  * 侧边栏菜单配置
@@ -84,6 +84,36 @@ export const menuList = [
       {
         key: '/image/compress',
         label: '图片压缩',
+      },
+      {
+        key: '/image/grid9',
+        label: '图片九宫格切图',
+      },
+    ],
+  },
+  {
+    key: '/format',
+    label: '格式化工具',
+    icon: Document,
+    children: [
+      {
+        key: '/format/json',
+        label: 'JSON格式化',
+      },
+      {
+        key: '/format/sql',
+        label: 'SQL格式化',
+      },
+    ],
+  },
+  {
+    key: '/code',
+    label: '代码工具',
+    icon: Files,
+    children: [
+      {
+        key: '/code/diff',
+        label: '代码对比',
       },
     ],
   },

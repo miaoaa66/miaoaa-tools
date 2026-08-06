@@ -1,52 +1,86 @@
-# miaoaa-tools   
+# miaoaa-tools
 
-本地离线可用的，常用开发工具   
+本地离线可用的开发工具集合，无需联网，保护隐私，开箱即用。
 
-仓库：    
-https://gitee.com/miaoaa66/miaoaa-tools   
+## 特性
 
+- 联网安装包之后。完全本地运行，无需网络连接
+- 支持多种图片和文本处理工具
+- 基于 Vue 3 + Vite，响应快速
+- 开源免费，持续更新
 
-## 功能   
+## 功能列表
 
-✅ avif/webp转png   
-✅ 图片&Base64互转   
-✅ 图片&SVG互转   
-✅ 图片转ico   
-✅ GIF拆分PNG   
-✅ 多PNG合成GIF   
-✅ URL编码/解码   
-✅ 变量格式转换   
-✅ 字符串生成二维码   
-✅ 二维码解码   
-✅ 字符串生成条形码   
-✅ 条形码解码   
-✅ 图片裁剪   
-✅ 图片压缩   
+- avif/webp 转 png
+- 图片裁剪
+- 图片压缩
+- 图片九宫格切图
+- 图片转 ico
+- 图片 & Base64 互转
+- 图片 & SVG 互转
+- URL 编码/解码
+- 字符串生成二维码
+- 二维码解码
+- 字符串生成条形码
+- 条形码解码
+- GIF 拆分 PNG
+- 多 PNG 合成 GIF
+- 变量格式转换
+- JSON 格式化
+- SQL 格式化
+- 代码对比
 
+## 技术栈
 
-## 需求 
+- **前端框架**: Vue 3.5
+- **构建工具**: Vite 8
+- **状态管理**: Pinia
+- **UI 组件**: Element Plus
+- **路由**: Vue Router
 
-json格式化   
-代码对比   
-sql格式化   
-图片九宫格切图   
+## 环境要求
 
+- Node.js >= 22.18.0 或 >= 24.12.0
+- 推荐使用 Node.js 22.16.0（已验证稳定运行）
 
-## node版本   
+## 快速开始
 
-推荐使用22.16.0   
-我使用这个版本运行没问题   
+```bash
+# 安装依赖
+npm install
 
-
-## 运行项目   
-
-```
-# 下载
-npm i 
-
-# 运行
+# 启动开发服务器
 npm run dev
 
+# 构建生产版本
+npm run build
+
+# 预览生产版本
+npm run preview
+
+# 代码检查并自动修复
+npm run lint
 ```
 
-   
+## 项目结构
+
+```
+src/
+├── components/       # 公共组件
+├── views/           # 页面视图
+│   ├── convert/     # 编码转换工具
+│   ├── image/       # 图片处理工具
+│   ├── code/        # 代码工具
+│   └── format/      # 格式化工具
+├── router/          # 路由配置
+├── stores/          # 状态管理
+└── assets/          # 静态资源
+```
+
+## 贡献
+
+欢迎提交 Issue 或 Pull Request 来添加新功能或修复问题。
+
+## 许可证
+
+[MIT](LICENSE)

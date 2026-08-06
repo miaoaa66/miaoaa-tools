@@ -14,6 +14,31 @@
             <Moon v-else />
           </el-icon>
         </button>
+        <el-popover placement="bottom" :width="200" trigger="click">
+          <template #reference>
+            <button
+              class="theme-toggle"
+              title="主题颜色"
+              @click.stop
+            >
+              <div class="color-indicator" :style="{ backgroundColor: themeColor }"></div>
+            </button>
+          </template>
+          <div class="color-picker-panel">
+            <div class="color-picker-title">选择主题颜色</div>
+            <div class="color-options">
+              <div
+                v-for="color in themeColors"
+                :key="color.value"
+                class="color-option"
+                :class="{ active: themeColor === color.value }"
+                :style="{ backgroundColor: color.value }"
+                :title="color.name"
+                @click="setThemeColor(color.value)"
+              ></div>
+            </div>
+          </div>
+        </el-popover>
       </div>
       <el-menu
         :default-active="activeMenu"
@@ -44,7 +69,8 @@
         </template>
       </el-menu>
     </aside>
-    <main class="layout-content">
+    <main class="layout-content" ref="contentRef">
+      <FullscreenButton :target="contentRef" />
       <RouterView />
     </main>
   </div>
@@ -53,10 +79,11 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import { useRoute, useRouter } from 'vue-router'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Sunny, Moon } from '@element-plus/icons-vue'
 import { menuList } from '@/menu'
-import { useThemeStore } from '@/stores/theme'
+import { useThemeStore, themeColors } from '@/stores/theme'
+import FullscreenButton from '@/components/FullscreenButton/FullscreenButton.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -64,12 +91,17 @@ const themeStore = useThemeStore()
 
 const isDark = computed(() => themeStore.isDark)
 const toggleTheme = () => themeStore.toggleTheme()
+const themeColor = computed(() => themeStore.themeColor)
+const setThemeColor = (color) => themeStore.setThemeColor(color)
 
 const activeMenu = computed(() => route.path)
 
 const handleLogoClick = () => {
   router.push('/')
 }
+
+// 主内容区 DOM 引用，作为全屏按钮的目标
+const contentRef = ref(null)
 </script>
 
 <style scoped>
@@ -123,6 +155,49 @@ const handleLogoClick = () => {
 
 .theme-toggle:hover {
   background-color: var(--toggle-bg-hover);
+}
+
+.color-indicator {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.color-picker-panel {
+  padding: 8px;
+}
+
+.color-picker-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--content-text);
+}
+
+.color-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.color-option {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.color-option.active {
+  border: 2px solid var(--content-text);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
 }
 
 .side-menu {
