@@ -27,14 +27,6 @@
         <div class="stage-wrap">
           <div class="stage">
             <img ref="imgRef" :src="imageUrl" class="stage-img" @load="onImgLoad" />
-            <div class="grid-overlay">
-              <div v-for="i in 9" :key="i" class="grid-cell"
-                :class="{ active: hoverIndex === i - 1 }"
-                @mouseenter="hoverIndex = i - 1"
-                @mouseleave="hoverIndex = -1">
-                <span class="cell-index">{{ i }}</span>
-              </div>
-            </div>
           </div>
           <div class="stage-meta">
             <span class="meta">原图：{{ naturalW }} × {{ naturalH }} px</span>
@@ -94,9 +86,6 @@
         <div class="slices-title">切片预览（点击可单独下载）</div>
         <div class="slices-grid">
           <div v-for="(s, i) in slices" :key="i" class="slice-item"
-            :class="{ active: hoverIndex === i }"
-            @mouseenter="hoverIndex = i"
-            @mouseleave="hoverIndex = -1"
             @click="downloadOne(i)">
             <img :src="s.url" class="slice-img" />
             <div class="slice-mask">
@@ -127,7 +116,6 @@ const imgRef = ref(null)
 const cutMode = ref('equal') // 'equal' | 'square'
 const outFormat = ref('png') // 'png' | 'jpeg' | 'webp'
 const quality = ref(0.9)
-const hoverIndex = ref(-1)
 
 // ============ 生成结果 ============
 const generating = ref(false)
@@ -346,52 +334,6 @@ onBeforeUnmount(() => {
   pointer-events: none;
 }
 
-.grid-overlay {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-}
-
-.grid-cell {
-  /* 双色边框：白主线 + 黑内阴影，确保在任意背景下都可见 */
-  border-right: 1px solid rgba(255, 255, 255, 0.7);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
-  box-shadow: inset -1px -1px 0 rgba(0, 0, 0, 0.35);
-  box-sizing: border-box;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 4px 6px;
-  transition: background-color 0.15s ease;
-}
-
-.grid-cell:nth-child(3n) {
-  border-right: none;
-  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.35);
-}
-
-.grid-cell:nth-child(n + 7) {
-  border-bottom: none;
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.35);
-}
-
-.grid-cell:nth-child(3n):nth-child(n + 7) {
-  box-shadow: none;
-}
-
-.grid-cell.active {
-  background-color: rgba(64, 158, 255, 0.55);
-}
-
-.cell-index {
-  font-size: 12px;
-  color: #fff;
-  text-shadow: 0 0 2px rgba(0, 0, 0, 0.9), 0 1px 2px rgba(0, 0, 0, 0.9);
-  line-height: 1;
-}
-
 .stage-meta {
   display: flex;
   flex-wrap: wrap;
@@ -436,12 +378,6 @@ onBeforeUnmount(() => {
   border-radius: 6px;
   overflow: hidden;
   cursor: pointer;
-  transition: border-color 0.15s ease, transform 0.15s ease;
-}
-
-.slice-item.active {
-  border-color: var(--el-color-primary);
-  transform: translateY(-2px);
 }
 
 .slice-img {
