@@ -84,9 +84,9 @@ const tableData = ref([
     url: 'https://www.npmjs.com/package/@zxing/library',
   },
   {
-    name: 'ffmpeg',
-    desc: '音频剪辑',
-    url: 'https://www.npmjs.com/package/@ffmpeg/core',
+    name: 'mediabunny',
+    desc: '音视频裁剪',
+    url: 'https://www.npmjs.com/package/mediabunny',
   },
   {
     name: '',

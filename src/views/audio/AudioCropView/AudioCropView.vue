@@ -4,14 +4,21 @@
       <template #header>
         <div class="card-header">
           <span>音频时长裁剪</span>
-          <el-button v-if="audioBuffer" link type="primary" @click="reset">
+          <el-button v-if="fileName" link type="primary" @click="reset">
             重置
           </el-button>
         </div>
       </template>
 
-      <el-upload v-if="!audioBuffer" drag accept="audio/*" :auto-upload="false" :show-file-list="false"
-        :on-change="onFileChange" class="uploader">
+      <el-upload
+        v-if="!audioLoaded"
+        drag
+        accept="audio/*"
+        :auto-upload="false"
+        :show-file-list="false"
+        :on-change="onFileChange"
+        class="uploader"
+      >
         <el-icon class="el-icon--upload">
           <UploadFilled />
         </el-icon>
@@ -20,7 +27,7 @@
         </div>
         <template #tip>
           <div class="el-upload__tip">
-            支持 mp3 / wav / ogg / m4a / flac 等格式，裁剪后保持原格式，全程在本地处理
+            支持 mp3 / wav / ogg / m4a / flac 等格式，裁剪后保持原格式，直接流复制，无重编码损失
           </div>
         </template>
       </el-upload>
@@ -28,15 +35,15 @@
       <div v-else class="content">
         <div class="meta-bar">
           <span>{{ fileName }} · {{ formatSize(fileSize) }}</span>
-          <span>· 总时长 {{ formatTime(duration) }}</span>
-          <span>· {{ (sampleRate / 1000).toFixed(1) }} kHz · {{ channelCount }} 声道</span>
+          <span v-if="duration">· 总时长 {{ formatTime(duration) }}</span>
+          <span v-if="sampleRate">· {{ (sampleRate / 1000).toFixed(1) }} kHz{{ channelCount ? ' · ' + channelCount + ' 声道' : '' }}</span>
         </div>
 
-        <div v-if="decoding" class="loading">
+        <div v-if="loadingMeta" class="loading">
           <el-icon class="is-loading">
             <Loading />
           </el-icon>
-          <span>正在解码音频...</span>
+          <span>正在读取音频信息...</span>
         </div>
 
         <template v-else>
@@ -50,47 +57,78 @@
 
             <div class="slider-row">
               <span class="slider-label">开始</span>
-              <el-slider v-model="startTime" :min="0" :max="duration" :step="0.1" size="small"
-                :format-tooltip="(v) => v.toFixed(1) + 's'" @input="syncRange" />
+              <el-slider
+                v-model="startTime"
+                :min="0"
+                :max="duration"
+                :step="0.1"
+                size="small"
+                :format-tooltip="(v) => v.toFixed(1) + 's'"
+                @input="syncRange"
+              />
             </div>
             <div class="slider-row">
               <span class="slider-label">结束</span>
-              <el-slider v-model="endTime" :min="0" :max="duration" :step="0.1" size="small"
-                :format-tooltip="(v) => v.toFixed(1) + 's'" @input="syncRange" />
+              <el-slider
+                v-model="endTime"
+                :min="0"
+                :max="duration"
+                :step="0.1"
+                size="small"
+                :format-tooltip="(v) => v.toFixed(1) + 's'"
+                @input="syncRange"
+              />
             </div>
 
             <div class="input-row">
               <div class="input-item">
                 <span class="slider-label">开始（秒）</span>
-                <el-input-number v-model="startTime" :min="0" :max="duration" :step="0.1" :precision="1"
-                  size="small" controls-position="right" @change="syncRange" />
+                <el-input-number
+                  v-model="startTime"
+                  :min="0"
+                  :max="duration"
+                  :step="0.1"
+                  :precision="1"
+                  size="small"
+                  controls-position="right"
+                  @change="syncRange"
+                />
               </div>
               <div class="input-item">
                 <span class="slider-label">结束（秒）</span>
-                <el-input-number v-model="endTime" :min="0" :max="duration" :step="0.1" :precision="1"
-                  size="small" controls-position="right" @change="syncRange" />
+                <el-input-number
+                  v-model="endTime"
+                  :min="0"
+                  :max="duration"
+                  :step="0.1"
+                  :precision="1"
+                  size="small"
+                  controls-position="right"
+                  @change="syncRange"
+                />
               </div>
             </div>
           </div>
 
           <div class="actions">
-            <el-button :type="playing ? 'warning' : 'primary'" :icon="playing ? VideoPause : VideoPlay"
-              :disabled="engineLoading || cropping" @click="togglePreview">
+            <el-button
+              :type="playing ? 'warning' : 'primary'"
+              :icon="playing ? VideoPause : VideoPlay"
+              :disabled="cropping"
+              @click="togglePreview"
+            >
               {{ playing ? '停止试听' : '试听区间' }}
             </el-button>
-            <el-button type="success" :icon="Download" :loading="engineLoading || cropping"
-              @click="cropAndDownload">
-              {{ engineLoading ? '正在加载处理引擎...' : '裁剪并下载' }}
+            <el-button type="success" :icon="Download" :loading="cropping" @click="cropAndDownload">
+              裁剪并下载
             </el-button>
           </div>
 
-          <div v-if="engineLoading || cropping" class="loading">
+          <div v-if="cropping" class="loading">
             <el-icon class="is-loading">
               <Loading />
             </el-icon>
-            <span>
-              {{ engineLoading ? '首次使用需加载音频处理引擎（约 30MB），请稍候...' : '正在裁剪，请稍候...' }}
-            </span>
+            <span>正在裁剪，请稍候...</span>
           </div>
 
           <p class="output-hint">
@@ -106,27 +144,40 @@
 import { ref, computed, onBeforeUnmount } from 'vue'
 import { ElMessage } from 'element-plus'
 import { UploadFilled, Loading, VideoPlay, VideoPause, Download } from '@element-plus/icons-vue'
-import coreURL from '@ffmpeg/core?url'
-import wasmURL from '@ffmpeg/core/wasm?url'
+import {
+  Input,
+  Output,
+  Conversion,
+  ALL_FORMATS,
+  BlobSource,
+  BufferTarget,
+  Mp3OutputFormat,
+  WavOutputFormat,
+  FlacOutputFormat,
+  OggOutputFormat,
+} from 'mediabunny'
+import { registerMp3Encoder } from '@mediabunny/mp3-encoder'
+
+registerMp3Encoder()
 
 const fileName = ref('')
 const fileSize = ref(0)
 const rawFile = ref(null)
-const audioBuffer = ref(null)
+const audioLoaded = ref(false)
+const loadingMeta = ref(false)
+
+const duration = ref(0)
 const sampleRate = ref(0)
 const channelCount = ref(0)
-const decoding = ref(false)
+
 const startTime = ref(0)
 const endTime = ref(0)
 const playing = ref(false)
-const engineLoading = ref(false)
 const cropping = ref(false)
 
 let audioCtx = null
 let sourceNode = null
-let ffmpegPromise = null
 
-const duration = computed(() => audioBuffer.value?.duration || 0)
 const cropDuration = computed(() => Math.max(0, endTime.value - startTime.value))
 
 function formatSize(bytes) {
@@ -145,7 +196,6 @@ function formatTime(sec) {
   return `${mm}:${ss}.${ds}`
 }
 
-// 保持 开始 ≤ 结束，区间始终非空
 function syncRange() {
   const s = Math.min(startTime.value, endTime.value)
   const e = Math.max(startTime.value, endTime.value)
@@ -153,9 +203,16 @@ function syncRange() {
   endTime.value = e
 }
 
-function onFileChange(uploadFile) {
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+  }
+  return audioCtx
+}
+
+async function onFileChange(uploadFile) {
   const raw = uploadFile?.raw ?? uploadFile
-  pickFile(raw)
+  await pickFile(raw)
 }
 
 async function pickFile(file) {
@@ -169,30 +226,29 @@ async function pickFile(file) {
   fileName.value = file.name
   fileSize.value = file.size
   rawFile.value = file
-  decoding.value = true
+  loadingMeta.value = true
   try {
-    const arrayBuffer = await file.arrayBuffer()
-    const ctx = getAudioContext()
-    const buffer = await ctx.decodeAudioData(arrayBuffer)
-    audioBuffer.value = buffer
-    sampleRate.value = buffer.sampleRate
-    channelCount.value = buffer.numberOfChannels
+    const input = new Input({
+      source: new BlobSource(file),
+      formats: ALL_FORMATS,
+    })
+
+    duration.value = await input.computeDuration()
+    const audioTrack = await input.getPrimaryAudioTrack()
+    if (audioTrack) {
+      sampleRate.value = await audioTrack.getSampleRate()
+      channelCount.value = await audioTrack.getNumberOfChannels()
+    }
     startTime.value = 0
-    endTime.value = buffer.duration
-    ElMessage.success('解码成功')
+    endTime.value = duration.value
+    audioLoaded.value = true
+    ElMessage.success('读取成功')
   } catch (err) {
-    ElMessage.error('解码失败：' + (err?.message || '无法识别的音频格式'))
+    ElMessage.error('读取失败：' + (err?.message || '无法识别的音频格式'))
     reset()
   } finally {
-    decoding.value = false
+    loadingMeta.value = false
   }
-}
-
-function getAudioContext() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-  }
-  return audioCtx
 }
 
 function togglePreview() {
@@ -200,22 +256,33 @@ function togglePreview() {
     stopPreview()
     return
   }
-  if (!audioBuffer.value || cropDuration.value <= 0) {
+  if (!rawFile.value || cropDuration.value <= 0) {
     ElMessage.warning('裁剪区间为空')
     return
   }
-  const ctx = getAudioContext()
-  if (ctx.state === 'suspended') ctx.resume()
+  playPreview()
+}
+
+async function playPreview() {
   stopPreview()
-  sourceNode = ctx.createBufferSource()
-  sourceNode.buffer = audioBuffer.value
-  sourceNode.connect(ctx.destination)
-  sourceNode.onended = () => {
-    sourceNode = null
+  try {
+    const arrayBuffer = await rawFile.value.arrayBuffer()
+    const ctx = getAudioContext()
+    if (ctx.state === 'suspended') await ctx.resume()
+    const audioBuffer = await ctx.decodeAudioData(arrayBuffer)
+    sourceNode = ctx.createBufferSource()
+    sourceNode.buffer = audioBuffer
+    sourceNode.connect(ctx.destination)
+    sourceNode.onended = () => {
+      sourceNode = null
+      playing.value = false
+    }
+    sourceNode.start(0, startTime.value, cropDuration.value)
+    playing.value = true
+  } catch (err) {
+    ElMessage.error('试听失败：' + (err?.message || '未知错误'))
     playing.value = false
   }
-  sourceNode.start(0, startTime.value, cropDuration.value)
-  playing.value = true
 }
 
 function stopPreview() {
@@ -223,7 +290,7 @@ function stopPreview() {
     try {
       sourceNode.stop()
     } catch {
-      // 已停止时忽略
+      // already stopped
     }
     sourceNode.disconnect()
     sourceNode = null
@@ -231,17 +298,46 @@ function stopPreview() {
   playing.value = false
 }
 
-// 懒加载 ffmpeg：首次调用时下载并初始化 wasm 引擎，之后复用
-function loadFFmpeg() {
-  if (!ffmpegPromise) {
-    ffmpegPromise = (async () => {
-      const { FFmpeg } = await import('@ffmpeg/ffmpeg')
-      const ffmpeg = new FFmpeg()
-      await ffmpeg.load({ coreURL, wasmURL })
-      return ffmpeg
-    })()
+function getOutputFormat(fileName) {
+  const ext = (fileName.match(/\.([^.]+)$/)?.[1] || '').toLowerCase()
+  switch (ext) {
+    case 'mp3':
+      return { format: new Mp3OutputFormat(), ext: 'mp3', mime: 'audio/mpeg' }
+    case 'wav':
+    case 'wave':
+      return { format: new WavOutputFormat(), ext: 'wav', mime: 'audio/wav' }
+    case 'flac':
+      return { format: new FlacOutputFormat(), ext: 'flac', mime: 'audio/flac' }
+    case 'ogg':
+      return { format: new OggOutputFormat(), ext: 'ogg', mime: 'audio/ogg' }
+    default:
+      return { format: new Mp3OutputFormat(), ext: 'mp3', mime: 'audio/mpeg' }
   }
-  return ffmpegPromise
+}
+
+function sanitizeTrim(trim) {
+  const start = Math.max(0, trim.start)
+  const end = Math.max(start + 0.05, trim.end)
+  return { start, end }
+}
+
+async function tryCrop(file, output, trim) {
+  const sanitized = sanitizeTrim(trim)
+  const input = new Input({
+    source: new BlobSource(file),
+    formats: ALL_FORMATS,
+  })
+
+  const conversion = await Conversion.init({ input, output, trim: sanitized })
+
+  if (!conversion.isValid) {
+    return { success: false, conversion }
+  }
+
+  conversion.onProgress = () => {}
+
+  await conversion.execute()
+  return { success: true, conversion }
 }
 
 async function cropAndDownload() {
@@ -250,39 +346,49 @@ async function cropAndDownload() {
     ElMessage.warning('裁剪区间为空')
     return
   }
-  engineLoading.value = true
+
   cropping.value = true
   stopPreview()
   try {
-    const ffmpeg = await loadFFmpeg()
-    engineLoading.value = false
+    const trim = {
+      start: startTime.value,
+      end: endTime.value,
+    }
 
-    const m = fileName.value.match(/\.([^.]+)$/)
-    const ext = (m && m[1] ? m[1] : 'mp3').toLowerCase()
-    const inputName = `input.${ext}`
-    const outputName = `output.${ext}`
-    const base = fileName.value.replace(/\.[^.]+$/, '') || 'audio'
-    const downloadName = `${base}_${startTime.value.toFixed(1)}s-${endTime.value.toFixed(1)}s.${ext}`
+    const { format: outputFormat, ext, mime } = getOutputFormat(fileName.value)
 
-    const data = new Uint8Array(await rawFile.value.arrayBuffer())
-    await ffmpeg.writeFile(inputName, data)
-    const code = await ffmpeg.exec([
-      '-i', inputName,
-      '-ss', String(startTime.value),
-      '-to', String(endTime.value),
-      '-c', 'copy',
-      outputName,
-    ])
-    if (code !== 0) throw new Error(`ffmpeg 返回错误码 ${code}`)
+    const output = new Output({
+      format: outputFormat,
+      target: new BufferTarget(),
+    })
 
-    const output = await ffmpeg.readFile(outputName)
-    const blob = new Blob([output], { type: rawFile.value.type })
-    downloadBlob(blob, downloadName)
-    ElMessage.success('裁剪完成，已下载（保持原格式）')
+    const result = await tryCrop(rawFile.value, output, trim)
+
+    if (result.success) {
+      const blob = new Blob([output.target.buffer], { type: mime })
+      downloadBlob(blob, ext)
+      ElMessage.success(`裁剪完成，已下载 ${ext.toUpperCase()} 格式`)
+    } else {
+      ElMessage.warning(`当前环境不支持导出 ${ext.toUpperCase()}，已自动降级为 WAV 格式`)
+
+      const wavOutput = new Output({
+        format: new WavOutputFormat(),
+        target: new BufferTarget(),
+      })
+
+      const wavResult = await tryCrop(rawFile.value, wavOutput, trim)
+
+      if (wavResult.success) {
+        const blob = new Blob([wavOutput.target.buffer], { type: 'audio/wav' })
+        downloadBlob(blob, 'wav')
+        ElMessage.success('裁剪完成，已下载 WAV 格式')
+      } else {
+        ElMessage.error('裁剪失败：当前浏览器不支持所需的音频编码')
+      }
+    }
   } catch (err) {
     ElMessage.error('裁剪失败：' + (err?.message || '未知错误'))
   } finally {
-    engineLoading.value = false
     cropping.value = false
   }
 }
@@ -305,14 +411,14 @@ function reset() {
   fileName.value = ''
   fileSize.value = 0
   rawFile.value = null
-  audioBuffer.value = null
+  audioLoaded.value = false
+  duration.value = 0
   sampleRate.value = 0
   channelCount.value = 0
-  decoding.value = false
+  loadingMeta.value = false
   startTime.value = 0
   endTime.value = 0
   cropping.value = false
-  engineLoading.value = false
 }
 
 onBeforeUnmount(() => {

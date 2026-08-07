@@ -10,8 +10,15 @@
         </div>
       </template>
 
-      <el-upload v-if="!fileName" drag accept="video/*" :auto-upload="false" :show-file-list="false"
-        :on-change="onFileChange" class="uploader">
+      <el-upload
+        v-if="!fileName"
+        drag
+        accept="video/*"
+        :auto-upload="false"
+        :show-file-list="false"
+        :on-change="onFileChange"
+        class="uploader"
+      >
         <el-icon class="el-icon--upload">
           <UploadFilled />
         </el-icon>
@@ -19,13 +26,23 @@
           拖拽视频到此处，或 <em>点击上传</em>
         </div>
         <template #tip>
-          <div class="el-upload__tip">支持 MP4 / WebM / MOV 等格式，浏览器支持时优先输出 MP4（H.264），否则回退 WebM</div>
+          <div class="el-upload__tip">
+            支持 MP4 / WebM / MOV / MKV 等格式，直接流复制裁剪，速度快无质量损失
+          </div>
         </template>
       </el-upload>
 
       <div v-else class="content">
-        <video ref="videoRef" :src="videoUrl" :controls="!trimming" playsinline class="preview"
-          @loadedmetadata="onLoadedMeta" @timeupdate="onTimeUpdate" @ended="onEnded"></video>
+        <video
+          ref="videoRef"
+          :src="videoUrl"
+          :controls="!trimming"
+          playsinline
+          class="preview"
+          @loadedmetadata="onLoadedMeta"
+          @timeupdate="onTimeUpdate"
+          @ended="onEnded"
+        ></video>
 
         <div class="meta-bar">
           <span>{{ fileName }} · {{ formatSize(fileSize) }}</span>
@@ -46,13 +63,27 @@
 
           <el-form label-width="84px" inline class="trim-form">
             <el-form-item label="开始时间">
-              <el-input-number v-model="startTime" :min="0" :max="endTime" :step="0.1" :precision="1"
-                controls-position="right" style="width: 140px" />
+              <el-input-number
+                v-model="startTime"
+                :min="0"
+                :max="endTime"
+                :step="0.1"
+                :precision="1"
+                controls-position="right"
+                style="width: 140px"
+              />
               <el-button size="small" @click="setStartFromCurrent">设为当前</el-button>
             </el-form-item>
             <el-form-item label="结束时间">
-              <el-input-number v-model="endTime" :min="startTime" :max="duration" :step="0.1" :precision="1"
-                controls-position="right" style="width: 140px" />
+              <el-input-number
+                v-model="endTime"
+                :min="startTime"
+                :max="duration"
+                :step="0.1"
+                :precision="1"
+                controls-position="right"
+                style="width: 140px"
+              />
               <el-button size="small" @click="setEndFromCurrent">设为当前</el-button>
             </el-form-item>
           </el-form>
@@ -66,7 +97,7 @@
             <el-icon class="is-loading">
               <Loading />
             </el-icon>
-            正在裁剪 {{ formatTime(progressSec) }} / {{ formatTime(trimDuration) }} ...
+            正在裁剪...
           </span>
         </div>
       </div>
@@ -78,9 +109,25 @@
 import { ref, computed, onBeforeUnmount } from 'vue'
 import { ElMessage } from 'element-plus'
 import { UploadFilled, Loading } from '@element-plus/icons-vue'
+import {
+  Input,
+  Output,
+  Conversion,
+  ALL_FORMATS,
+  BlobSource,
+  BufferTarget,
+  Mp4OutputFormat,
+  WebMOutputFormat,
+  MovOutputFormat,
+  MkvOutputFormat,
+} from 'mediabunny'
+import { registerMp3Encoder } from '@mediabunny/mp3-encoder'
+
+registerMp3Encoder()
 
 const fileName = ref('')
 const fileSize = ref(0)
+const rawFile = ref(null)
 const videoUrl = ref('')
 const videoRef = ref(null)
 const barRef = ref(null)
@@ -94,10 +141,6 @@ const endTime = ref(0)
 const currentTime = ref(0)
 
 const trimming = ref(false)
-const progressSec = ref(0)
-
-let trimCancelled = false
-let recorder = null
 
 const trimDuration = computed(() => Math.max(0, endTime.value - startTime.value))
 
@@ -129,10 +172,10 @@ function formatSize(bytes) {
 }
 
 function reset() {
-  stopTrimming()
   if (videoUrl.value) URL.revokeObjectURL(videoUrl.value)
   fileName.value = ''
   fileSize.value = 0
+  rawFile.value = null
   videoUrl.value = ''
   duration.value = 0
   videoWidth.value = 0
@@ -156,6 +199,7 @@ function pickFile(file) {
   reset()
   fileName.value = file.name
   fileSize.value = file.size
+  rawFile.value = file
   videoUrl.value = URL.createObjectURL(file)
 }
 
@@ -172,9 +216,6 @@ function onTimeUpdate() {
   const v = videoRef.value
   if (!v) return
   currentTime.value = v.currentTime
-  if (trimming.value) {
-    progressSec.value = Math.min(trimDuration.value, v.currentTime - startTime.value)
-  }
 }
 
 function onEnded() {
@@ -212,133 +253,6 @@ function setEndFromCurrent() {
   endTime.value = currentTime.value
 }
 
-// 选择浏览器支持的录制格式，优先 MP4（H.264），不支持时回退 WebM
-function pickMime() {
-  const candidates = [
-    { mime: 'video/mp4;codecs=avc1.42E01E,mp4a.40.2', ext: 'mp4' },
-    { mime: 'video/mp4', ext: 'mp4' },
-    { mime: 'video/webm;codecs=vp8,opus', ext: 'webm' },
-    { mime: 'video/webm;codecs=vp9,opus', ext: 'webm' },
-    { mime: 'video/webm;codecs=vp8', ext: 'webm' },
-    { mime: 'video/webm', ext: 'webm' },
-  ]
-  return candidates.find((c) => MediaRecorder.isTypeSupported(c.mime)) || null
-}
-
-// 跳转到指定时间并等待跳转完成（录制前保证从正确位置开始）
-function seekToWait(v, t) {
-  return new Promise((resolve) => {
-    const target = Math.min(Math.max(t, 0), v.duration || 0)
-    const doSeek = () => {
-      if (Math.abs(v.currentTime - target) < 0.05) {
-        resolve()
-        return
-      }
-      const onSeeked = () => {
-        v.removeEventListener('seeked', onSeeked)
-        resolve()
-      }
-      v.addEventListener('seeked', onSeeked)
-      v.currentTime = target
-      // 兜底：seek 事件异常时避免卡死
-      setTimeout(() => {
-        v.removeEventListener('seeked', onSeeked)
-        resolve()
-      }, 3000)
-    }
-    if (v.readyState < 1) {
-      // 元数据尚未就绪时先等待 loadedmetadata
-      const onLoaded = () => {
-        v.removeEventListener('loadedmetadata', onLoaded)
-        doSeek()
-      }
-      v.addEventListener('loadedmetadata', onLoaded)
-      setTimeout(() => {
-        v.removeEventListener('loadedmetadata', onLoaded)
-        doSeek()
-      }, 3000)
-    } else {
-      doSeek()
-    }
-  })
-}
-
-// 等待播放位置真正开始推进，确保画面已输出后再录制，避免开头黑帧/静止帧
-function waitForPlayback(v, from) {
-  return new Promise((resolve, reject) => {
-    const start = performance.now()
-    const tick = () => {
-      if (v.ended || v.currentTime > from + 0.1) {
-        resolve()
-        return
-      }
-      if (performance.now() - start > 8000) {
-        reject(new Error('视频播放启动超时'))
-        return
-      }
-      requestAnimationFrame(tick)
-    }
-    requestAnimationFrame(tick)
-  })
-}
-
-// 循环检测播放位置到达结束时间（或视频自然播完），到达后停止录制
-function waitForEnd(v, end) {
-  return new Promise((resolve) => {
-    let rafId = 0
-    const cleanup = () => {
-      cancelAnimationFrame(rafId)
-      v.removeEventListener('ended', onEnded)
-    }
-    const finish = () => {
-      cleanup()
-      resolve()
-    }
-    const onEnded = () => finish()
-    const tick = () => {
-      if (!trimming.value) {
-        finish()
-        return
-      }
-      progressSec.value = Math.min(
-        trimDuration.value,
-        Math.max(0, v.currentTime - startTime.value),
-      )
-      if (v.ended || v.currentTime >= end - 0.05) {
-        finish()
-        return
-      }
-      rafId = requestAnimationFrame(tick)
-    }
-    v.addEventListener('ended', onEnded)
-    rafId = requestAnimationFrame(tick)
-  })
-}
-
-function getStream(v) {
-  if (typeof v.captureStream === 'function') return v.captureStream()
-  if (typeof v.mozCaptureStream === 'function') return v.mozCaptureStream()
-  return null
-}
-
-function stopRecorder() {
-  if (recorder && recorder.state !== 'inactive') {
-    try {
-      recorder.stop()
-    } catch {
-      // 忽略停止异常
-    }
-  }
-}
-
-function stopTrimming() {
-  trimCancelled = true
-  stopRecorder()
-  recorder = null
-  trimming.value = false
-  if (videoRef.value) videoRef.value.pause()
-}
-
 function downloadBlob(blob, ext) {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -351,77 +265,101 @@ function downloadBlob(blob, ext) {
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
+function getOutputFormat(fileName) {
+  const ext = (fileName.match(/\.([^.]+)$/)?.[1] || '').toLowerCase()
+  switch (ext) {
+    case 'mp4':
+    case 'm4v':
+      return { format: new Mp4OutputFormat(), ext: 'mp4', mime: 'video/mp4' }
+    case 'webm':
+      return { format: new WebMOutputFormat(), ext: 'webm', mime: 'video/webm' }
+    case 'mov':
+      return { format: new MovOutputFormat(), ext: 'mov', mime: 'video/quicktime' }
+    case 'mkv':
+      return { format: new MkvOutputFormat(), ext: 'mkv', mime: 'video/x-matroska' }
+    default:
+      return { format: new Mp4OutputFormat(), ext: 'mp4', mime: 'video/mp4' }
+  }
+}
+
+function sanitizeTrim(trim) {
+  const start = Math.max(0, trim.start)
+  const end = Math.max(start + 0.05, trim.end)
+  return { start, end }
+}
+
+async function tryTrim(file, output, trim) {
+  const sanitized = sanitizeTrim(trim)
+  const input = new Input({
+    source: new BlobSource(file),
+    formats: ALL_FORMATS,
+  })
+
+  const conversion = await Conversion.init({ input, output, trim: sanitized })
+
+  if (!conversion.isValid) {
+    return { success: false, conversion }
+  }
+
+  conversion.onProgress = () => {}
+
+  await conversion.execute()
+  return { success: true, conversion }
+}
+
 async function startTrim() {
-  const v = videoRef.value
-  if (!v) return
+  if (!rawFile.value) return
   if (trimDuration.value < 0.1) {
     ElMessage.warning('请先设置有效的裁剪区间')
     return
   }
-  const stream = getStream(v)
-  if (!stream) {
-    ElMessage.error('当前浏览器不支持视频流捕获，请使用最新版 Chrome / Edge / Firefox')
-    return
-  }
-  if (typeof MediaRecorder === 'undefined') {
-    ElMessage.error('当前浏览器不支持 MediaRecorder')
-    return
-  }
-  const format = pickMime()
-  if (!format) {
-    ElMessage.error('当前浏览器不支持视频录制')
-    return
-  }
 
   trimming.value = true
-  progressSec.value = 0
-  trimCancelled = false
   try {
-    // 1. 暂停并跳转到开始时间，等待跳转完成
-    v.pause()
-    await seekToWait(v, startTime.value)
-    if (trimCancelled) return
-
-    // 2. 开始播放，等待画面真正输出后再录制，避免开头黑帧
-    await v.play()
-    await waitForPlayback(v, startTime.value)
-    if (trimCancelled) return
-
-    // 3. 开始录制
-    recorder = new MediaRecorder(stream, { mimeType: format.mime })
-    const chunks = []
-    recorder.ondataavailable = (e) => {
-      if (e.data && e.data.size) chunks.push(e.data)
+    const trim = {
+      start: startTime.value,
+      end: endTime.value,
     }
-    const done = new Promise((resolve, reject) => {
-      recorder.onstop = () => {
-        resolve(new Blob(chunks, { type: recorder.mimeType || 'video/webm' }))
-      }
-      recorder.onerror = () => reject(new Error('录制过程中发生错误'))
+
+    const { format: outputFormat, ext, mime } = getOutputFormat(fileName.value)
+
+    const output = new Output({
+      format: outputFormat,
+      target: new BufferTarget(),
     })
-    recorder.start(1000)
 
-    // 4. 实时检测播放位置到达结束时间后停止录制
-    await waitForEnd(v, endTime.value)
-    if (trimCancelled) return
-    stopRecorder()
-    v.pause()
+    const result = await tryTrim(rawFile.value, output, trim)
 
-    const blob = await done
-    if (trimCancelled) return
-    downloadBlob(blob, format.ext)
-    ElMessage.success(`裁剪完成，已导出 ${format.ext.toUpperCase()} 格式`)
+    if (result.success) {
+      const blob = new Blob([output.target.buffer], { type: mime })
+      downloadBlob(blob, ext)
+      ElMessage.success(`裁剪完成，已导出 ${ext.toUpperCase()} 格式`)
+    } else {
+      ElMessage.warning(`当前环境不支持导出 ${ext.toUpperCase()}，已自动降级为 MP4 格式`)
+
+      const mp4Output = new Output({
+        format: new Mp4OutputFormat(),
+        target: new BufferTarget(),
+      })
+
+      const mp4Result = await tryTrim(rawFile.value, mp4Output, trim)
+
+      if (mp4Result.success) {
+        const blob = new Blob([mp4Output.target.buffer], { type: 'video/mp4' })
+        downloadBlob(blob, 'mp4')
+        ElMessage.success('裁剪完成，已下载 MP4 格式')
+      } else {
+        ElMessage.error('裁剪失败：当前浏览器不支持所需的视频编码')
+      }
+    }
   } catch (err) {
-    stopRecorder()
     ElMessage.error('裁剪失败：' + (err?.message || '未知错误'))
   } finally {
     trimming.value = false
-    progressSec.value = 0
   }
 }
 
 onBeforeUnmount(() => {
-  stopTrimming()
   if (videoUrl.value) URL.revokeObjectURL(videoUrl.value)
 })
 </script>
