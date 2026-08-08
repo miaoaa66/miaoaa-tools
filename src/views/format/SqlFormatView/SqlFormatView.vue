@@ -169,7 +169,7 @@ function tokenizeSql(sql) {
     // 数字
     if (/[0-9]/.test(c) || (c === '.' && /[0-9]/.test(sql[i + 1]))) {
       let j = i
-      while (j < n && /[0-9.eE+\-]/.test(sql[j])) {
+      while (j < n && /[0-9.eE+-]/.test(sql[j])) {
         if ((sql[j] === '+' || sql[j] === '-') && !/[eE]/.test(sql[j - 1])) break
         j++
       }

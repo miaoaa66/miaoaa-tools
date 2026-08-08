@@ -82,6 +82,10 @@ export const menuList = [
         key: '/convert/timestamp',
         label: '时间戳转换',
       },
+      {
+        key: '/convert/json-to-excel',
+        label: 'JSON导出Excel',
+      },
     ],
   },
   {

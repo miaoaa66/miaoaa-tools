@@ -109,6 +109,12 @@ const router = createRouter({
       meta: { title: '时间戳转换' },
     },
     {
+      path: '/convert/json-to-excel',
+      name: 'json-to-excel',
+      component: () => import('../views/convert/JsonToExcelView/JsonToExcelView.vue'),
+      meta: { title: 'JSON导出Excel' },
+    },
+    {
       path: '/image/crop',
       name: 'image-crop',
       component: () => import('../views/image/ImageCropView/ImageCropView.vue'),
