@@ -18,34 +18,42 @@
 
     <div class="card">
       <h3>生成配置</h3>
-      <el-form inline>
-        <el-form-item label="输出类型">
-          <el-radio-group v-model="outputType">
-            <el-radio label="array">对象数组</el-radio>
-            <el-radio label="object">单对象</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="生成条数" v-if="outputType === 'array'">
-          <el-input-number
-            v-model="count"
-            :min="1"
-            :max="10000"
-            controls-position="right"
-          />
-        </el-form-item>
-        <el-form-item label="导出格式">
-          <el-select v-model="exportFormat" style="width: 120px">
-            <el-option label="JSON" value="json" />
-            <el-option label="JSON Array" value="json-array" />
-            <el-option label="CSV" value="csv" />
-            <el-option label="SQL INSERT" value="sql" />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="generate">生成数据</el-button>
-          <el-button @click="addField">添加字段</el-button>
-          <el-button @click="clearFields" plain>清空</el-button>
-        </el-form-item>
+      <el-form class="config-form">
+        <div class="form-row">
+          <el-form-item label="输出类型">
+            <el-radio-group v-model="outputType">
+              <el-radio value="array">对象数组</el-radio>
+              <el-radio value="object">单对象</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </div>
+        <div class="form-row">
+          <el-form-item label="生成条数" v-if="outputType === 'array'">
+            <el-input-number
+              v-model="count"
+              :min="1"
+              :max="10000"
+              controls-position="right"
+            />
+          </el-form-item>
+          <el-form-item label="导出格式">
+            <el-select v-model="exportFormat" style="width: 140px">
+              <el-option label="JSON" value="json" />
+              <el-option label="JSON Array" value="json-array" />
+              <el-option label="CSV" value="csv" />
+              <el-option label="SQL INSERT" value="sql" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label=" ">
+            <el-button type="primary" @click="generate">生成数据</el-button>
+          </el-form-item>
+        </div>
+        <div class="form-row">
+          <el-form-item>
+            <el-button @click="addField">添加字段</el-button>
+            <el-button @click="clearFields" plain>清空</el-button>
+          </el-form-item>
+        </div>
       </el-form>
     </div>
 
@@ -283,9 +291,26 @@ function formatToSql(data) {
 }
 
 async function copyResult() {
-  if (!formattedResult.value) return
+  if (!generatedData.value || generatedData.value.length === 0) {
+    ElMessage.warning('没有可复制的数据')
+    return
+  }
+
+  const text = formatResult(generatedData.value, exportFormat.value)
+
   try {
-    await navigator.clipboard.writeText(formattedResult.value)
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text)
+    } else {
+      const textarea = document.createElement('textarea')
+      textarea.value = text
+      textarea.style.position = 'fixed'
+      textarea.style.left = '-9999px'
+      document.body.appendChild(textarea)
+      textarea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textarea)
+    }
     ElMessage.success('已复制到剪贴板')
   } catch (e) {
     ElMessage.error('复制失败，请手动复制')
@@ -377,14 +402,30 @@ h3 {
 }
 
 .template-btn:hover {
-  border-color: var(--theme-color);
-  color: var(--theme-color);
+  border-color: var(--el-color-primary);
+  color: var(--el-color-primary);
 }
 
 .template-btn.active {
-  background-color: var(--theme-color);
-  border-color: var(--theme-color);
+  background-color: var(--el-color-primary);
+  border-color: var(--el-color-primary);
   color: #fff;
+}
+
+.config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.form-row .el-form-item {
+  margin-bottom: 0;
 }
 
 .rules-panel {
