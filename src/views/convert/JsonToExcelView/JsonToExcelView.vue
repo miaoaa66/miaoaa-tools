@@ -97,21 +97,6 @@
       @change="handleFileChange"
     />
 
-    <el-dialog v-model="editDialogVisible" title="编辑列名" width="400px">
-      <el-form label-width="80px">
-        <el-form-item label="原始 key">
-          <el-input :model-value="editingColumn?.key" disabled />
-        </el-form-item>
-        <el-form-item label="显示名称">
-          <el-input v-model="editingLabel" placeholder="输入自定义列名" />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <el-button @click="editDialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="confirmEditColumnName">确定</el-button>
-      </template>
-    </el-dialog>
-
     <el-dialog v-model="sortEditDialogVisible" title="编辑列" width="400px">
       <el-form label-width="80px">
         <el-form-item label="原始 key">
