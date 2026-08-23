@@ -185,6 +185,18 @@ export const menuList = [
         key: '/audio/crop',
         label: '音频时长裁剪',
       },
+      {
+        key: '/audio/word-to-audio',
+        label: '文本转语音',
+      },
+      {
+        key: '/audio/word-to-audio-v2',
+        label: '文本转语音（跟读变色）',
+      },
+      {
+        key: '/audio/audio-to-word',
+        label: '语音转文字',
+      },
     ],
   },
 ]

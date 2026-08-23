@@ -210,6 +210,24 @@ const router = createRouter({
       component: () => import('../views/audio/AudioCropView/AudioCropView.vue'),
       meta: { title: '音频时长裁剪' },
     },
+    {
+      path: '/audio/word-to-audio',
+      name: 'word-to-audio',
+      component: () => import('../views/audio/WordToAudioView/WordToAudioView.vue'),
+      meta: { title: '文本转语音' },
+    },
+    {
+      path: '/audio/word-to-audio-v2',
+      name: 'word-to-audio-v2',
+      component: () => import('../views/audio/WordToAudioV2View/WordToAudioV2View.vue'),
+      meta: { title: '文本转语音（跟读变色）' },
+    },
+    {
+      path: '/audio/audio-to-word',
+      name: 'audio-to-word',
+      component: () => import('../views/audio/AudioToWordView/AudioToWordView.vue'),
+      meta: { title: '语音转文字' },
+    },
   ],
 })
 
