@@ -1,0 +1,12 @@
+{
+  "name": "miaoaa-tools-browser",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Miaoaa Tools 浏览器插件：点击图标在新标签页打开离线工具集",
+  "scripts": {
+    "package": "node scripts/package.js"
+  },
+  "devDependencies": {
+    "adm-zip": "^0.5.16"
+  }
+}

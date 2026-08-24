@@ -1,8 +1,9 @@
 # miaoaa-tools
 
-本地离线开发工具集合（约 36 个工具），提供两种形态：
+本地离线开发工具集合（约 36 个工具），提供三种形态：
 
 - **Web 应用**（`miaoaa-tools/`）：Vue 3 + Vite + Element Plus 纯前端工具集，浏览器直接使用
+- **浏览器插件**（`miaoaa-tools-browser/`）：Chrome / Edge 扩展，点击工具栏图标在新标签页打开工具集
 - **VSCode 插件**（`miaoaa-tools-vscode/`）：把同一个工具集嵌入 VSCode，可在底部面板 / 主侧边栏 / 辅助侧边栏使用
 
 所有工具均在本地运行，数据不上传，保护隐私。
@@ -12,6 +13,7 @@
 ```
 miaoaa-tools/
 ├── miaoaa-tools/         # Web 应用（Vue 3 + Vite + Element Plus）
+├── miaoaa-tools-browser/ # 浏览器插件（Chrome / Edge，MV3）
 ├── miaoaa-tools-vscode/  # VSCode 插件（扩展外壳 + Webview 内嵌）
 ├── LICENSE
 └── README.md
@@ -28,6 +30,16 @@ npm run dev       # 开发
 npm run build     # 构建生产版本
 ```
 
+### 浏览器插件
+
+```bash
+cd miaoaa-tools-browser
+npm install
+npm run package   # 构建 webview 并打包成 .zip
+```
+
+产物为 `miaoaa-tools-browser/dist/`（可加载目录）与 `miaoaa-tools-browser/miaoaa-tools-browser-<version>.zip`（分发包）。安装方式：`chrome://extensions` 打开「开发者模式」→「加载已解压的扩展程序」→ 选择 `dist/`。
+
 ### VSCode 插件
 
 ```bash
@@ -41,6 +53,7 @@ npm run package   # 构建 webview 并打包成 .vsix
 ## 技术栈
 
 - **Web 应用**：Vue 3.5 / Vite 8 / Pinia / Element Plus / Vue Router
+- **浏览器插件**：Chromium MV3（manifest v3 + service worker）
 - **VSCode 插件**：TypeScript + esbuild（扩展端）/ @vscode/vsce（打包）
 
 ## 许可证
