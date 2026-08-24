@@ -1,6 +1,6 @@
 # Miaoaa Tools
 
-把 `miaoaa-tools` 离线工具集合（Vue 3 + Vite + Element Plus）嵌入到 VSCode 中，约 **36 个**本地工具，**所有处理在本地完成，数据不上传**。
+把 `miaoaa-tools` 离线工具集合（Vue 3 + Vite + Element Plus）嵌入到 VSCode 中，约 **35 个**本地工具，**所有处理在本地完成，数据不上传**。
 
 ## 功能
 
@@ -11,7 +11,7 @@
 - **格式化工具**：JSON 格式化、SQL 格式化、文字竖排
 - **代码工具**：代码对比、正则测试、Mock 数据生成器
 - **视频工具**：视频时长裁剪
-- **音频工具**：音频时长裁剪、文本转语音、语音转文字
+- **音频工具**：音频时长裁剪、文本转语音、文本转语音（跟读变色）
 
 ## 使用方式
 
@@ -53,8 +53,17 @@ npm run build      # 仅重新打包扩展端 TS
 | 剪贴板 | ✅ 桥接 | 走扩展端 `env.clipboard` |
 | Canvas 图像处理、格式化、代码、路由、主题 | ✅ 完全可用 | 无需改动 |
 | 文本转语音 / 音频裁剪 | ⚠️ 待实测 | Webview 内可能可用，建议实测 |
-| 语音转文字（`webkitSpeechRecognition`） | ❌ 不可用 | Electron Webview 沙箱未提供，已在 UI 提示 |
-| 全屏（`requestFullscreen`） | ❌ 不可用 | 已降级为拒绝 |
+
+## 与原版差异
+
+本扩展版相对原项目 `miaoaa-tools` 移除了以下功能（因 VSCode Webview 沙箱限制，不可用）：
+
+- **语音转文字**：`webkitSpeechRecognition` 在 Electron Webview 中未提供
+- **全屏按钮**：各视图右上角的全屏按钮
+
+保留但建议实测（仅标 ⚠️ 待实测，未移除）：
+
+- 音频时长裁剪、文本转语音（含跟读变色）
 
 ## 相关项目
 
