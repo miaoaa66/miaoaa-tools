@@ -1,0 +1,20 @@
+{
+  "main": "index.html",
+  "logo": "logo.png",
+  "preload": "preload.js",
+  "pluginName": "Miaoaa Tools",
+  "description": "本地离线开发工具集合：图片/编码/格式化/代码/音视频等 36 个工具",
+  "author": "miaoaa",
+  "version": "0.1.0",
+  "pluginSetting": {
+    "single": true,
+    "height": 800
+  },
+  "features": [
+    {
+      "code": "miaoaa-tools",
+      "explain": "Miaoaa Tools：本地离线开发工具集合",
+      "cmds": ["miaoaa", "toolbox", "工具", "工具集"]
+    }
+  ]
+}

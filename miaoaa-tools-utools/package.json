@@ -1,0 +1,9 @@
+{
+  "name": "miaoaa-tools-utools",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Miaoaa Tools uTools 插件：搜索框唤起，窗口内打开离线工具集",
+  "scripts": {
+    "package": "node scripts/package.js"
+  }
+}
