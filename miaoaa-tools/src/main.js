@@ -13,6 +13,10 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import App from './App.vue'
 import router from './router'
 
+// VSCode Webview 适配层：仅在 VSCode 环境生效，普通浏览器下不做任何改动
+import { installVscodeBridge } from './vscode'
+installVscodeBridge()
+
 const app = createApp(App)
 
 // 注册 Element Plus 全部图标

@@ -6,6 +6,8 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // 相对路径：使构建产物可被 VSCode Webview 通过 <base> 加载
+  base: './',
   plugins: [
     vue(),
     vueDevTools(),

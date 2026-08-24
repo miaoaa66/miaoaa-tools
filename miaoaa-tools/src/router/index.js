@@ -4,7 +4,8 @@ import HomeView from '../views/HomeView.vue'
 const SITE_TITLE = 'Miaoaa Tools'
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  // 固定 '/'：避免 Vite base:'./' 使 BASE_URL 变为 './' 导致 hash 路由异常
+  history: createWebHashHistory('/'),
   routes: [
     {
       path: '/',

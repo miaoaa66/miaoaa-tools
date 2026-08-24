@@ -1,0 +1,54 @@
+{
+  "name": "miaoaa-tools-vscode",
+  "displayName": "Miaoaa Tools",
+  "description": "Miaoaa Tools：集成图片/格式/代码/音视频等离线工具的 VSCode 插件，默认显示在底部面板，可拖到主侧边栏或辅助侧边栏。",
+  "version": "0.1.0",
+  "publisher": "miaoaa",
+  "license": "MIT",
+  "icon": "media/logo.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other"],
+  "main": "./dist/extension.js",
+  "activationEvents": ["onView:miaoaa-tools.mainView"],
+  "contributes": {
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "miaoaa-tools-container",
+          "title": "Miaoaa Tools",
+          "icon": "media/logo.png"
+        }
+      ]
+    },
+    "views": {
+      "miaoaa-tools-container": [
+        {
+          "type": "webview",
+          "id": "miaoaa-tools.mainView",
+          "name": "Miaoaa Tools"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "miaoaa-tools.open",
+        "title": "Miaoaa Tools: 打开",
+        "icon": "$(tools)"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "node esbuild.js",
+    "sync": "node scripts/sync-webview.js",
+    "vscode:prepublish": "npm run sync && npm run build",
+    "package": "npm run vscode:prepublish && vsce package --allow-missing-repository"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.2.0",
+    "esbuild": "^0.25.0"
+  }
+}
