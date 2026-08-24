@@ -1,6 +1,6 @@
 # Miaoaa Tools
 
-把 [miaoaa-tools](https://github.com) 离线工具集合（Vue 3 + Vite + Element Plus）嵌入到 VSCode 中，约 **36 个**本地工具，**所有处理在本地完成，数据不上传**。
+把 `miaoaa-tools` 离线工具集合（Vue 3 + Vite + Element Plus）嵌入到 VSCode 中，约 **36 个**本地工具，**所有处理在本地完成，数据不上传**。
 
 ## 功能
 
@@ -24,6 +24,19 @@
 
 命令面板：`Miaoaa Tools: 打开`
 
+## 开发与打包
+
+```bash
+npm install        # 安装依赖
+npm run package    # 构建 miaoaa-tools 并打包成 .vsix
+npm run sync       # 仅重新构建 / 拷贝 webview 产物（不打包）
+npm run build      # 仅重新打包扩展端 TS
+```
+
+打包产物为 `miaoaa-tools-vscode-<version>.vsix`，在 VSCode 扩展面板「从 VSIX 安装」即可。
+
+开发调试：用 VSCode 打开本目录，按 **F5** 启动 Extension Development Host（已配好 `.vscode/launch.json`）。
+
 ## 系统要求
 
 - VSCode **1.85** 及以上（辅助侧边栏从该版本开始支持）
@@ -45,8 +58,12 @@
 
 ## 相关项目
 
-- 原项目（纯前端工具集）：`miaoaa-tools/`
-- 扩展工程（VSCode 插件）：`miaoaa-tools-vscode/`
+- 原项目（纯前端工具集，Webview 内容来源）：`../miaoaa-tools`
+- 本扩展工程：`miaoaa-tools-vscode/`
+
+## 许可证
+
+MIT
 
 ## 反馈
 
