@@ -30,10 +30,6 @@
 - **UI 组件**: Element Plus
 - **路由**: Vue Router
 
-## 环境要求
-
-- Node.js >= 22.18.0 或 >= 24.12.0
-
 ## 快速开始
 
 ```bash
