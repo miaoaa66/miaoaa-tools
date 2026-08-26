@@ -1,6 +1,6 @@
 # VSCode 插件
 
-`miaoaa-tools-vscode/` 把 Miaoaa Tools 离线工具集合嵌入 VSCode，约 **35 个**本地工具，**所有处理在本地完成，数据不上传**。
+`miaoaa-tools-vscode/` 把 Miaoaa Tools 离线工具集合嵌入 VSCode，约 **36 个**本地工具，**所有处理在本地完成，数据不上传**。
 
 ## 使用方式
 

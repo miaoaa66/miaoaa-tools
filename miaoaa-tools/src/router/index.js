@@ -170,6 +170,12 @@ const router = createRouter({
       meta: { title: '视频时长裁剪' },
     },
     {
+      path: '/video/gif-convert',
+      name: 'video-gif-convert',
+      component: () => import('../views/video/VideoGifConvertView/VideoGifConvertView.vue'),
+      meta: { title: '视频&GIF互转' },
+    },
+    {
       path: '/format/json',
       name: 'format-json',
       component: () => import('../views/format/JsonFormatView/JsonFormatView.vue'),

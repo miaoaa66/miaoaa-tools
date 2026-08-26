@@ -44,7 +44,10 @@ const codeTools = [
 
 const mockTools = [{ text: 'Mock 数据生成器', link: '/tools/mock/generator' }]
 
-const videoTools = [{ text: '视频时长裁剪', link: '/tools/video/trim' }]
+const videoTools = [
+  { text: '视频时长裁剪', link: '/tools/video/trim' },
+  { text: '视频&GIF互转', link: '/tools/video/gif-convert' },
+]
 
 const audioTools = [
   { text: '音频时长裁剪', link: '/tools/audio/crop' },
@@ -71,7 +74,7 @@ const externalProjects = [
 export default defineConfig({
   lang: 'zh-CN',
   title: 'Miaoaa Tools 文档',
-  description: '本地离线开发工具集合（35 个工具 × 4 种形态）的完整使用文档',
+  description: '本地离线开发工具集合（36 个工具 × 4 种形态）的完整使用文档',
   head: [['link', { rel: 'icon', href: '/logo.png' }]],
   cleanUrls: true,
   themeConfig: {

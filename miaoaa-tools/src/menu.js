@@ -174,6 +174,10 @@ export const menuList = [
         key: '/video/trim',
         label: '视频时长裁剪',
       },
+      {
+        key: '/video/gif-convert',
+        label: '视频&GIF互转',
+      },
     ],
   },
   {
