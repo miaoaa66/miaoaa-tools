@@ -17,6 +17,7 @@ miaoaa-tools/
 ├── miaoaa-tools-browser/ # 浏览器插件（Chrome / Edge，MV3）
 ├── miaoaa-tools-vscode/  # VSCode 插件（扩展外壳 + Webview 内嵌）
 ├── miaoaa-tools-utools/  # uTools 插件（plugin.json + Web 嵌入）
+├── miaoaa-tools-doc/     # 文档站点（VitePress，介绍全部工具与形态）
 ├── LICENSE
 └── README.md
 ```
@@ -61,6 +62,17 @@ npm run package   # 构建 web 并组装 dist/（不再产 .upx）
 ```
 
 产物为 `miaoaa-tools-utools/dist/`（核心交付物）。**uTools v5.0+ 安装包已升级为 `.upxs`（加密 + 开发者签名）**，普通 zip 改名的 `.upx` 在 v7.x **不被识别**（只会被当作普通文件名匹配出「批量重命名 / 复制路径」等文件操作应用）。必须用「uTools 开发者工具」导入 `dist/plugin.json`，点「打包 UPXS」生成 `.upxs`，再长按 `.upxs` 右键 → 超级面板「安装插件应用」安装。
+
+## 文档
+
+基于 VitePress 的完整使用文档，详细介绍 4 种形态、全部工具（含运行截图）以及作者的其他开源项目：
+
+```bash
+cd miaoaa-tools-doc
+npm install
+npm run docs:dev       # 本地预览
+npm run docs:build     # 构建静态站点（产物 docs/.vitepress/dist/）
+```
 
 ## 技术栈
 

@@ -1,0 +1,184 @@
+>> home
+✓ 首页 - Miaoaa Tools
+  http://localhost:7011/#/
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/home.png
+>> about
+✓ 关于 - Miaoaa Tools
+  http://localhost:7011/#/about
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/about.png
+>> convert-avif-webp-to-png
+✓ avif/webp转png - Miaoaa Tools
+  http://localhost:7011/#/convert/avif-webp-to-png
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-avif-webp-to-png.png
+>> convert-image-base64
+✓ 图片&Base64互转 - Miaoaa Tools
+  http://localhost:7011/#/convert/image-base64
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-image-base64.png
+>> convert-image-svg
+✓ 图片&SVG互转 - Miaoaa Tools
+  http://localhost:7011/#/convert/image-svg
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-image-svg.png
+>> convert-image-to-ico
+✓ 图片转ico - Miaoaa Tools
+  http://localhost:7011/#/convert/image-to-ico
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-image-to-ico.png
+>> convert-gif-split
+✓ GIF拆分PNG - Miaoaa Tools
+  http://localhost:7011/#/convert/gif-split
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-gif-split.png
+>> convert-gif-merge
+cygpath: can't convert empty path
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-gif-merge.png
+>> convert-case-convert
+✓ 字母大小写互转 - Miaoaa Tools
+  http://localhost:7011/#/convert/case-convert
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-case-convert.png
+>> convert-url-encode
+✓ URL编码/解码 - Miaoaa Tools
+  http://localhost:7011/#/convert/url-encode
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-url-encode.png
+>> convert-variable
+✓ 变量格式转换 - Miaoaa Tools
+  http://localhost:7011/#/convert/variable
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-variable.png
+>> convert-qrcode-gen
+✓ 字符串生成二维码 - Miaoaa Tools
+  http://localhost:7011/#/convert/qrcode-gen
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-qrcode-gen.png
+>> convert-qrcode-decode
+✓ 二维码解码 - Miaoaa Tools
+  http://localhost:7011/#/convert/qrcode-decode
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-qrcode-decode.png
+>> convert-barcode-gen
+✓ 字符串生成条形码 - Miaoaa Tools
+  http://localhost:7011/#/convert/barcode-gen
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-barcode-gen.png
+>> convert-barcode-decode
+✓ 条形码解码 - Miaoaa Tools
+  http://localhost:7011/#/convert/barcode-decode
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-barcode-decode.png
+>> convert-amount-case
+✓ 金额大小写互转 - Miaoaa Tools
+  http://localhost:7011/#/convert/amount-case
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-amount-case.png
+>> convert-timestamp
+✓ 时间戳转换 - Miaoaa Tools
+  http://localhost:7011/#/convert/timestamp
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-timestamp.png
+>> convert-json-to-excel
+✓ JSON导出Excel - Miaoaa Tools
+  http://localhost:7011/#/convert/json-to-excel
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/convert-json-to-excel.png
+>> image-crop
+✓ 图片裁剪 - Miaoaa Tools
+  http://localhost:7011/#/image/crop
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/image-crop.png
+>> image-compress
+✓ 图片压缩 - Miaoaa Tools
+  http://localhost:7011/#/image/compress
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/image-compress.png
+>> image-grid9
+✓ 图片九宫格切图 - Miaoaa Tools
+  http://localhost:7011/#/image/grid9
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/image-grid9.png
+>> image-corner-radius
+✓ 图片裁剪圆角 - Miaoaa Tools
+  http://localhost:7011/#/image/corner-radius
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/image-corner-radius.png
+>> image-add-bg
+✓ 透明图片加背景 - Miaoaa Tools
+  http://localhost:7011/#/image/add-bg
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/image-add-bg.png
+>> image-watermark
+✓ 图片加水印 - Miaoaa Tools
+  http://localhost:7011/#/image/watermark
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/image-watermark.png
+>> image-rotate
+✓ 图片旋转 - Miaoaa Tools
+  http://localhost:7011/#/image/rotate
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/image-rotate.png
+>> image-flip
+✓ 图片水平/垂直翻转 - Miaoaa Tools
+  http://localhost:7011/#/image/flip
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/image-flip.png
+>> video-trim
+✓ 视频时长裁剪 - Miaoaa Tools
+  http://localhost:7011/#/video/trim
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/video-trim.png
+>> format-json
+✓ JSON格式化 - Miaoaa Tools
+  http://localhost:7011/#/format/json
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/format-json.png
+>> format-sql
+✓ SQL格式化 - Miaoaa Tools
+  http://localhost:7011/#/format/sql
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/format-sql.png
+>> format-vertical-text
+✓ 文字竖排 - Miaoaa Tools
+  http://localhost:7011/#/format/vertical-text
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/format-vertical-text.png
+>> code-diff
+✓ 代码对比 - Miaoaa Tools
+  http://localhost:7011/#/code/diff
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/code-diff.png
+>> code-regex
+✓ 正则表达式测试 - Miaoaa Tools
+  http://localhost:7011/#/code/regex
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/code-regex.png
+>> mock-generator
+✓ Mock数据生成器 - Miaoaa Tools
+  http://localhost:7011/#/mock/generator
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/mock-generator.png
+>> audio-crop
+✓ 音频时长裁剪 - Miaoaa Tools
+  http://localhost:7011/#/audio/crop
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/audio-crop.png
+>> audio-word-to-audio
+✓ 文本转语音 - Miaoaa Tools
+  http://localhost:7011/#/audio/word-to-audio
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/audio-word-to-audio.png
+>> audio-word-to-audio-v2
+✓ 文本转语音（跟读变色） - Miaoaa Tools
+  http://localhost:7011/#/audio/word-to-audio-v2
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/audio-word-to-audio-v2.png
+>> audio-audio-to-word
+✓ 语音转文字 - Miaoaa Tools
+  http://localhost:7011/#/audio/audio-to-word
+✓ Done
+✓ Screenshot saved to docs/public/screenshots/audio-audio-to-word.png
