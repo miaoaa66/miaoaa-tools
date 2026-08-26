@@ -4,6 +4,7 @@
       <div class="logo" @click="handleLogoClick">
         <img alt="logo" src="@/assets/imgs/logo.png" width="32" height="32" />
         <span class="logo-text">Miaoaa Tools</span>
+        <MenuSearch />
         <button
           class="theme-toggle"
           :title="isDark ? '切换到亮色主题' : '切换到暗色主题'"
@@ -84,6 +85,7 @@ import { Sunny, Moon } from '@element-plus/icons-vue'
 import { menuList } from '@/menu'
 import { useThemeStore, themeColors } from '@/stores/theme'
 import FullscreenButton from '@/components/FullscreenButton/FullscreenButton.vue'
+import MenuSearch from '@/components/MenuSearch/MenuSearch.vue'
 
 const route = useRoute()
 const router = useRouter()
