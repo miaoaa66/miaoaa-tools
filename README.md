@@ -85,6 +85,11 @@ npm run docs:build     # 构建静态站点（产物 docs/.vitepress/dist/）
 - **VSCode 插件**：TypeScript + esbuild（扩展端）/ @vscode/vsce（打包）
 - **uTools 插件**：plugin.json（uTools 清单）+ uTools 开发者工具（v5.0+ 打包为加密签名的 `.upxs`，无 CLI/SDK）
 
+## 此项目开发模板：
+
+[plugin-forge github](https://github.com/miaoaa66/plugin-forge)
+[plugin-forge gitee](https://gitee.com/miaoaa66/plugin-forge)
+
 ## 许可证
 
 [MIT](LICENSE)
