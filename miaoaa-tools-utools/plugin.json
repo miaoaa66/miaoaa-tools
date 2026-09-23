@@ -3,7 +3,8 @@
   "logo": "logo.png",
   "preload": "preload.js",
   "pluginName": "Miaoaa Tools",
-  "description": "本地离线开发工具集合：图片/编码/格式化/代码/音视频等 36 个工具",
+  "description": "轻量本地离线开发工具集，36+ 工具涵盖图片/音视频处理（AVIF/WebP 互转、压缩裁剪、九宫格切图、GIF 合成拆分等）、文本编码（URL/Base64/Unicode）、代码格式化、数据处理（时间戳、二维码生成解析）等。纯前端运行、数据不上传保护隐私。开源仓库：https://github.com/miaoaa66/miaoaa-tools or https://gitee.com/miaoaa66/miaoaa-tools 框架仓库：https://github.com/miaoaa66/plugin-forge or https://gitee.com/miaoaa66/plugin-forge",
+  "homepage": "https://github.com/miaoaa66/miaoaa-tools",
   "author": "miaoaa",
   "version": "0.1.0",
   "pluginSetting": {
