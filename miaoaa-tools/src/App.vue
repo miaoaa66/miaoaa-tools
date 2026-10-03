@@ -1,45 +1,49 @@
 <template>
   <div class="layout">
     <aside class="layout-sider">
-      <div class="logo" @click="handleLogoClick">
-        <img alt="logo" src="@/assets/imgs/logo.png" width="32" height="32" />
-        <span class="logo-text">Miaoaa Tools</span>
-        <MenuSearch />
-        <button
-          class="theme-toggle"
-          :title="isDark ? '切换到亮色主题' : '切换到暗色主题'"
-          @click.stop="toggleTheme"
-        >
-          <el-icon :size="18">
-            <Sunny v-if="isDark" />
-            <Moon v-else />
-          </el-icon>
-        </button>
-        <el-popover placement="bottom" :width="200" trigger="click">
-          <template #reference>
-            <button
-              class="theme-toggle"
-              title="主题颜色"
-              @click.stop
-            >
-              <div class="color-indicator" :style="{ backgroundColor: themeColor }"></div>
-            </button>
-          </template>
-          <div class="color-picker-panel">
-            <div class="color-picker-title">选择主题颜色</div>
-            <div class="color-options">
-              <div
-                v-for="color in themeColors"
-                :key="color.value"
-                class="color-option"
-                :class="{ active: themeColor === color.value }"
-                :style="{ backgroundColor: color.value }"
-                :title="color.name"
-                @click="setThemeColor(color.value)"
-              ></div>
+      <div class="logo">
+        <div class="logo-brand" @click="handleLogoClick">
+          <img alt="logo" src="@/assets/imgs/logo.png" width="32" height="32" />
+          <span class="logo-text">Miaoaa Tools</span>
+        </div>
+        <div class="logo-actions">
+          <MenuSearch />
+          <button
+            class="theme-toggle"
+            :title="isDark ? '切换到亮色主题' : '切换到暗色主题'"
+            @click.stop="toggleTheme"
+          >
+            <el-icon :size="18">
+              <Sunny v-if="isDark" />
+              <Moon v-else />
+            </el-icon>
+          </button>
+          <el-popover placement="bottom" :width="200" trigger="click">
+            <template #reference>
+              <button
+                class="theme-toggle"
+                title="主题颜色"
+                @click.stop
+              >
+                <div class="color-indicator" :style="{ backgroundColor: themeColor }"></div>
+              </button>
+            </template>
+            <div class="color-picker-panel">
+              <div class="color-picker-title">选择主题颜色</div>
+              <div class="color-options">
+                <div
+                  v-for="color in themeColors"
+                  :key="color.value"
+                  class="color-option"
+                  :class="{ active: themeColor === color.value }"
+                  :style="{ backgroundColor: color.value }"
+                  :title="color.name"
+                  @click="setThemeColor(color.value)"
+                ></div>
+              </div>
             </div>
-          </div>
-        </el-popover>
+          </el-popover>
+        </div>
       </div>
       <el-menu
         :default-active="activeMenu"
@@ -123,6 +127,7 @@ const contentRef = ref(null)
 .logo {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   height: 56px;
   padding: 0 20px;
@@ -130,14 +135,34 @@ const contentRef = ref(null)
   font-weight: 600;
   font-size: 16px;
   border-bottom: 1px solid var(--sidebar-logo-border);
+}
+
+/* 仅 logo 图标 + 文字区域可点击返回首页，横条空白处不响应 */
+.logo-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
   cursor: pointer;
+}
+
+.logo-brand img {
+  flex-shrink: 0;
 }
 
 .logo-text {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex: 1;
+  min-width: 0;
+}
+
+/* 右侧操作区固定宽度，不参与收缩，保证图标按钮始终贴右 */
+.logo-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .theme-toggle {
