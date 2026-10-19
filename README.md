@@ -9,6 +9,32 @@
 
 所有工具均在本地运行，数据不上传，保护隐私。
 
+
+## 预览图
+
+### vscode安装插件 
+离线  
+![vscode_install](./preview/vscode_install.png)
+### vscode使用插件   
+![vscode](./preview/vscode.png)
+### 浏览器安装插件 
+chrome离线  
+![chrome_install](./preview/chrome_install.png)
+edge离线
+![chrome_install2](./preview/chrome_install2.png)
+### 浏览器使用插件   
+![chrome](./preview/chrome.png)
+### utools安装插件 
+在线,插件市场搜索  
+![utools_install](./preview/utools_install.png)
+或离线1
+![utools_install2](./preview/utools_install2.png)
+或离线2
+![utools_install3](./preview/utools_install3.png)
+### utools使用插件   
+![utools](./preview/utools.png)
+
+
 ## 目录结构
 
 ```
@@ -26,7 +52,7 @@ miaoaa-tools/
 
 ### 环境要求
 
-- Node.js >= 26.7.0（我本地是这个版本）
+- Node.js >= 26.7.0（推荐这个版本，我本地是这个版本）
 
 ### Web 应用
 
@@ -65,7 +91,7 @@ npm install
 npm run package   # 构建 web 并组装 dist/（不再产 .upx）
 ```
 
-产物为 `miaoaa-tools-utools/dist/`（核心交付物）。**uTools v5.0+ 安装包已升级为 `.upxs`（加密 + 开发者签名）**，普通 zip 改名的 `.upx` 在 v7.x **不被识别**（只会被当作普通文件名匹配出「批量重命名 / 复制路径」等文件操作应用）。必须用「uTools 开发者工具」导入 `dist/plugin.json`，点「打包 UPXS」生成 `.upxs`，再长按 `.upxs` 右键 → 超级面板「安装插件应用」安装。
+产物为 `miaoaa-tools-utools/dist/`（核心交付物）。**uTools v5.0.0 起将安装包格式升级为 `.upxs`（加密 + 开发者信息签名）**，任何普通 zip 工具改名的 `.upx` 在 v5.0.0 及之后版本均**不会被识别为插件安装包**。`.upxs` 需用「uTools 开发者工具」导入 `dist/plugin.json`，点「打包 UPXS」生成。安装方式任选其一：① 在文件资源管理器中左键单击选中 `.upxs`，按**鼠标中键**（默认触发键，未修改设置时）呼出超级面板 → 「安装插件应用」（超级面板已关闭则用方式②）；② 复制 `.upxs`，按 `Alt + Space`（默认快捷键，未修改设置时）呼出搜索框，粘贴 → 「安装插件应用」。
 
 ## 文档
 
@@ -83,12 +109,12 @@ npm run docs:build     # 构建静态站点（产物 docs/.vitepress/dist/）
 - **Web 应用**：Vue 3.5 / Vite 8 / Pinia / Element Plus / Vue Router
 - **浏览器插件**：Chromium MV3（manifest v3 + service worker）
 - **VSCode 插件**：TypeScript + esbuild（扩展端）/ @vscode/vsce（打包）
-- **uTools 插件**：plugin.json（uTools 清单）+ uTools 开发者工具（v5.0+ 打包为加密签名的 `.upxs`，无 CLI/SDK）
+- **uTools 插件**：plugin.json（uTools 清单）+ uTools 开发者工具（v5.0.0+ 打包为加密签名的 `.upxs`；官方未提供命令行打包工具）
 
 ## 此项目开发模板：
 
-[plugin-forge github](https://github.com/miaoaa66/plugin-forge)
-[plugin-forge gitee](https://gitee.com/miaoaa66/plugin-forge)
+[plugin-forge github](https://github.com/miaoaa66/plugin-forge)   
+[plugin-forge gitee](https://gitee.com/miaoaa66/plugin-forge)   
 
 ## ⚠️ 仓库说明
 本项目**主仓库位于 Gitee**，GitHub 为自动单向同步的只读镜像。
